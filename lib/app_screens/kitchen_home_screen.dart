@@ -1,9 +1,12 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:menu_tablet/app_screens/history_screen.dart';
-import 'package:menu_tablet/app_screens/order_screen.dart';
+import 'package:menu_tablet/app_screens/kitchen_history_screen.dart';
+import 'package:menu_tablet/app_screens/kitchen_order_screen.dart';
+import 'package:menu_tablet/app_screens/logout_screen.dart';
 import 'package:menu_tablet/util/Constants.dart';
 import 'package:menu_tablet/util/HexColor.dart';
-import 'package:menu_tablet/widgets/sidebar_button.dart';
+import 'package:menu_tablet/widgets/dialog_manager.dart';
+import 'package:menu_tablet/widgets/kitchen_sidebar_button.dart';
 
 class KitchenHomeScreen extends StatefulWidget {
   @override
@@ -79,38 +82,41 @@ class _KitchenHomeScreenState extends State<KitchenHomeScreen> {
           ),
         ),
         SizedBox(height: 30),
-        SideBarButton(
-          iconData: Icons.login,
-          btnTxt: "Orders",
-          onClick: () {
-            print("Orders");
-            setState(() {
-              chosenIndexForSecondPanel = 0;
-            });
-          },
-        ),
+        InkWell(
+            onTap: () {
+              setState(() {
+                chosenIndexForSecondPanel = 0;
+              });
+            },
+            child: KitchenSideBarButton(
+                iconData: Icons.login,
+                btnTxt: "Orders",
+                index: chosenIndexForSecondPanel)),
         SizedBox(height: 20),
-        SideBarButton(
-          iconData: Icons.history,
-          btnTxt: "History",
-          onClick: () {
-            print("History");
-            setState(() {
-              chosenIndexForSecondPanel = 1;
-            });
-          },
-        ),
+        InkWell(
+            onTap: () {
+              setState(() {
+                chosenIndexForSecondPanel = 1;
+              });
+            },
+            child: KitchenSideBarButton(
+                iconData: Icons.login,
+                btnTxt: "History",
+                index: chosenIndexForSecondPanel)),
         SizedBox(height: 20),
-        SideBarButton(
-          iconData: Icons.logout,
-          btnTxt: "Logout",
-          onClick: () {
-            print("Logout");
-            setState(() {
-              chosenIndexForSecondPanel = 2;
-            });
-          },
-        )
+        InkWell(
+            onTap: () {
+              setState(() {
+                chosenIndexForSecondPanel = 2;
+                DialogManager dm = new DialogManager();
+                dm.yesorNoButtonDialog(context, "Are you sure to logout?", "OK",
+                    "Cancel", DialogType.QUESTION);
+              });
+            },
+            child: KitchenSideBarButton(
+                iconData: Icons.login,
+                btnTxt: "Logout",
+                index: chosenIndexForSecondPanel))
       ],
     );
   }
@@ -118,14 +124,15 @@ class _KitchenHomeScreenState extends State<KitchenHomeScreen> {
   _secondPanel() {
     switch (chosenIndexForSecondPanel) {
       case 0:
-        return OrderScreen();
+        return KitchenOrderScreen();
         break;
       case 1:
-        return HistoryScreen();
+        return KitchenHistoryScreen();
         break;
       case 2:
-        return Text("Logout");
+        return LogoutScreen();
         break;
+      
     }
   }
 }

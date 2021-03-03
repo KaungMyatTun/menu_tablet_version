@@ -10,9 +10,12 @@ String cookingBtnColor = "#FDC67D";
 String readyBtnColor = "#FDC67D";
 String doneBtnColor = "#64C123";
 String loginTxtColor = "#F05A28";
+String orderCardColor = "#FFF2E0";
+String separatorColor = "#DBDBDB";
 
 // text font size
 double titleFontSize = 18.0;
 double buttoTxtFontSize = 14.0;
 double subTitleTxtFontSize = 14.0;
 double normalTxtFontSize = 12.0;
+double tableNumberFontSize = 28.0;
