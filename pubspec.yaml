@@ -30,6 +30,7 @@ dependencies:
   cupertino_icons: ^1.0.0
   page_transition: ^1.1.6
   awesome_dialog: ^1.2.0
+  rxdart: ^0.22.0
 
 dev_dependencies:
   flutter_test:

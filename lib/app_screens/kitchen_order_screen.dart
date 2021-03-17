@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:menu_tablet/app_screens/kitchen_order_detail_screen.dart';
+import 'package:menu_tablet/bloc/menu_tablet_main_bloc.dart';
 import 'package:menu_tablet/util/Constants.dart';
 import 'package:menu_tablet/util/HexColor.dart';
 import 'package:menu_tablet/widgets/kitchen_order_card_content.dart';
 
 class KitchenOrderScreen extends StatefulWidget {
+  final MenuTabletMainBloc bloc;
+  KitchenOrderScreen({@required this.bloc});
   @override
   _KitchenOrderScreenState createState() => _KitchenOrderScreenState();
 }
@@ -157,7 +160,7 @@ class _KitchenOrderScreenState extends State<KitchenOrderScreen>
                       child: Container(
                           color: Colors.white,
                           width: MediaQuery.of(context).size.width,
-                          child: KitchenOrderDetailScreen()),
+                          child: KitchenOrderDetailScreen(bloc: widget.bloc,tableId: selectedIndex,)),
                     )
                   ],
                 ),

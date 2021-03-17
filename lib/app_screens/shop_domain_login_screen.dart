@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:menu_tablet/app_screens/login_screen.dart';
+import 'package:menu_tablet/bloc/menu_tablet_main_bloc.dart';
 import 'package:menu_tablet/util/Constants.dart';
 import 'package:menu_tablet/util/HexColor.dart';
 import 'package:menu_tablet/util/rounded_button.dart';
@@ -7,6 +8,8 @@ import 'package:menu_tablet/widgets/custom_text_feild_form.dart';
 import 'package:page_transition/page_transition.dart';
 
 class ShopDomainLoginScreen extends StatefulWidget {
+  final MenuTabletMainBloc bloc;
+  ShopDomainLoginScreen({@required this.bloc});
   @override
   _ShopDomainLoginScreenState createState() => _ShopDomainLoginScreenState();
 }
@@ -85,7 +88,7 @@ class _ShopDomainLoginScreenState extends State<ShopDomainLoginScreen> {
                                     duration: Duration(milliseconds: 500),
                                       type: PageTransitionType
                                           .rightToLeft,
-                                      child: LoginScreen()));
+                                      child: LoginScreen(bloc: widget.bloc)));
                             }
                           },
                           text: "CONTINUE",

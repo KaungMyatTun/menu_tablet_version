@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:menu_tablet/bloc/menu_tablet_main_bloc.dart';
 import 'package:menu_tablet/util/Constants.dart';
 import 'package:menu_tablet/util/HexColor.dart';
 
 class KitchenHistoryDetailScreen extends StatefulWidget {
+  final MenuTabletMainBloc bloc;
+  KitchenHistoryDetailScreen({@required this.bloc});
   @override
   _KitchenHistoryDetailScreenState createState() =>
       _KitchenHistoryDetailScreenState();

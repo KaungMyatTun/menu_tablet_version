@@ -1,23 +1,21 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:menu_tablet/app_screens/kitchen_history_screen.dart';
-import 'package:menu_tablet/app_screens/kitchen_order_screen.dart';
 import 'package:menu_tablet/app_screens/logout_screen.dart';
+import 'package:menu_tablet/app_screens/waiter_order_screen.dart';
 import 'package:menu_tablet/bloc/menu_tablet_main_bloc.dart';
 import 'package:menu_tablet/util/Constants.dart';
 import 'package:menu_tablet/util/HexColor.dart';
 import 'package:menu_tablet/widgets/dialog_manager.dart';
-import 'package:menu_tablet/widgets/kitchen_sidebar_button.dart';
+import 'package:menu_tablet/widgets/waiter_sidebar_button.dart';
 
-class KitchenHomeScreen extends StatefulWidget {
+class WaiterHomeScreen extends StatefulWidget {
   final MenuTabletMainBloc bloc;
-  KitchenHomeScreen({@required this.bloc});
+  WaiterHomeScreen({@required this.bloc});
   @override
-  _KitchenHomeScreenState createState() => _KitchenHomeScreenState();
+  _WaiterHomeScreenState createState() => _WaiterHomeScreenState();
 }
 
-class _KitchenHomeScreenState extends State<KitchenHomeScreen> {
-  
+class _WaiterHomeScreenState extends State<WaiterHomeScreen> {
   int chosenIndexForSecondPanel;
   @override
   void initState() {
@@ -43,9 +41,10 @@ class _KitchenHomeScreenState extends State<KitchenHomeScreen> {
             Expanded(
                 flex: 2,
                 child: Container(
-                    height: MediaQuery.of(context).size.height,
-                    color: Colors.white,
-                    child: firstPanel())),
+                  height: MediaQuery.of(context).size.height,
+                  color: Colors.white,
+                  child: firstPanel(),
+                )),
             Expanded(flex: 10, child: _secondPanel())
           ],
         ),
@@ -74,7 +73,7 @@ class _KitchenHomeScreenState extends State<KitchenHomeScreen> {
                 size: 50,
               ),
               Text(
-                "KITCHEN",
+                "Waiter",
                 style: TextStyle(
                     color: HexColor(secondaryColor),
                     fontSize: titleFontSize,
@@ -90,7 +89,7 @@ class _KitchenHomeScreenState extends State<KitchenHomeScreen> {
                 chosenIndexForSecondPanel = 0;
               });
             },
-            child: KitchenSideBarButton(
+            child: WaiterSideBarButton(
                 iconData: Icons.login,
                 btnTxt: "Orders",
                 index: chosenIndexForSecondPanel)),
@@ -101,9 +100,9 @@ class _KitchenHomeScreenState extends State<KitchenHomeScreen> {
                 chosenIndexForSecondPanel = 1;
               });
             },
-            child: KitchenSideBarButton(
-                iconData: Icons.history,
-                btnTxt: "History",
+            child: WaiterSideBarButton(
+                iconData: Icons.login,
+                btnTxt: "Tables",
                 index: chosenIndexForSecondPanel)),
         SizedBox(height: 20),
         InkWell(
@@ -115,7 +114,7 @@ class _KitchenHomeScreenState extends State<KitchenHomeScreen> {
                     "Cancel", DialogType.QUESTION);
               });
             },
-            child: KitchenSideBarButton(
+            child: WaiterSideBarButton(
                 iconData: Icons.logout,
                 btnTxt: "Logout",
                 index: chosenIndexForSecondPanel))
@@ -126,15 +125,21 @@ class _KitchenHomeScreenState extends State<KitchenHomeScreen> {
   _secondPanel() {
     switch (chosenIndexForSecondPanel) {
       case 0:
-        return KitchenOrderScreen(bloc: widget.bloc);
+        {
+          setState(() {
+            widget.bloc.showFirstPageOnWaiter = true;
+          });
+          return WaiterOrderScreen(
+            bloc: widget.bloc,
+          );
+        }
         break;
       case 1:
-        return KitchenHistoryScreen(bloc: widget.bloc);
+        return Container();
         break;
       case 2:
         return LogoutScreen();
         break;
-      
     }
   }
 }

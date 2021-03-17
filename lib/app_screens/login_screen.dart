@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:menu_tablet/app_screens/kitchen_home_screen.dart';
+import 'package:menu_tablet/app_screens/waiter_home_screen.dart';
+import 'package:menu_tablet/bloc/menu_tablet_main_bloc.dart';
 import 'package:menu_tablet/util/Constants.dart';
 import 'package:menu_tablet/util/HexColor.dart';
 import 'package:menu_tablet/util/rounded_button.dart';
@@ -7,6 +9,8 @@ import 'package:menu_tablet/widgets/custom_text_feild_form.dart';
 import 'package:page_transition/page_transition.dart';
 
 class LoginScreen extends StatefulWidget {
+  final MenuTabletMainBloc bloc;
+  LoginScreen({@required this.bloc});
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -105,12 +109,18 @@ class _LoginScreenState extends State<LoginScreen> {
                           RoundedButton(
                             onPressed: () {
                               if (_formKey.currentState.validate()) {
+                                // Navigator.pushReplacement(
+                                //     context,
+                                //     PageTransition(
+                                //         duration: Duration(milliseconds: 500),
+                                //         type: PageTransitionType.rightToLeft,
+                                //         child: KitchenHomeScreen()));
                                 Navigator.pushReplacement(
                                     context,
                                     PageTransition(
                                         duration: Duration(milliseconds: 500),
                                         type: PageTransitionType.rightToLeft,
-                                        child: KitchenHomeScreen()));
+                                        child: WaiterHomeScreen(bloc: widget.bloc,)));
                               }
                             },
                             text: "CONTINUE",

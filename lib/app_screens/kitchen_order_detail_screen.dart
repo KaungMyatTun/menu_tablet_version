@@ -1,10 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:menu_tablet/app_screens/kitchen_history_detail_screen.dart';
+import 'package:menu_tablet/bloc/menu_tablet_main_bloc.dart';
 import 'package:menu_tablet/util/Constants.dart';
 import 'package:menu_tablet/util/HexColor.dart';
+import 'package:menu_tablet/widgets/rs_btn.dart';
 
 class KitchenOrderDetailScreen extends StatefulWidget {
+  final MenuTabletMainBloc bloc;
+  final int tableId;
+  KitchenOrderDetailScreen({@required this.bloc,@required this.tableId});
   @override
   _KitchenOrderDetailScreenState createState() =>
       _KitchenOrderDetailScreenState();
@@ -28,7 +34,7 @@ class _KitchenOrderDetailScreenState extends State<KitchenOrderDetailScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Text(
-              "Pending...",
+              "Pending... ${widget.tableId}",
               style: TextStyle(
                   fontSize: tableNumberFontSize, fontWeight: FontWeight.bold),
             ),
@@ -59,73 +65,28 @@ class _KitchenOrderDetailScreenState extends State<KitchenOrderDetailScreen> {
                 scrollDirection: Axis.horizontal,
                 children: [
                   SizedBox(width: 10),
-                  InkWell(
-                    onTap: () {
-                      print(selectedItem.length);
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: HexColor(preparingBtnColor)),
-                      width: 100,
-                      child: Center(
-                          child: Text(
-                        "Preparing",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: titleFontSize,
-                            fontWeight: FontWeight.bold,
-                            color: HexColor(textColor)),
-                      )),
-                    ),
+                  RsBtn(
+                    fun: null,
+                    btnTxt: "Preparing",
+                    colorString: preparingBtnColor,
                   ),
                   SizedBox(width: 10),
-                  Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        color: HexColor(cookingBtnColor)),
-                    width: 100,
-                    child: Center(
-                        child: Text(
-                      "Cooking",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: titleFontSize,
-                          fontWeight: FontWeight.bold,
-                          color: HexColor(textColor)),
-                    )),
+                  RsBtn(
+                    fun: null,
+                    btnTxt: "Cooking",
+                    colorString: cookingBtnColor,
                   ),
                   SizedBox(width: 10),
-                  Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        color: HexColor(readyBtnColor)),
-                    width: 100,
-                    child: Center(
-                        child: Text(
-                      "Ready to Serve",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: titleFontSize,
-                          fontWeight: FontWeight.bold,
-                          color: HexColor(textColor)),
-                    )),
+                  RsBtn(
+                    fun: null,
+                    btnTxt: "Ready To Serve",
+                    colorString: readyBtnColor,
                   ),
                   SizedBox(width: 10),
-                  Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        color: HexColor(doneBtnColor)),
-                    width: 100,
-                    child: Center(
-                        child: Text(
-                      "Done",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: titleFontSize,
-                          fontWeight: FontWeight.bold,
-                          color: HexColor(textColor)),
-                    )),
+                  RsBtn(
+                    fun: null,
+                    btnTxt: "Done",
+                    colorString: doneBtnColor,
                   ),
                 ],
               ),

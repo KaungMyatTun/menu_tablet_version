@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:menu_tablet/app_screens/kitchen_history_detail_screen.dart';
+import 'package:menu_tablet/app_screens/kitchen_home_screen.dart';
+import 'package:menu_tablet/bloc/menu_tablet_main_bloc.dart';
 import 'package:menu_tablet/util/Constants.dart';
 import 'package:menu_tablet/util/HexColor.dart';
 import 'package:menu_tablet/widgets/kitchen_order_card_content.dart';
 
 class KitchenHistoryScreen extends StatefulWidget {
+  final MenuTabletMainBloc bloc;
+  KitchenHistoryScreen({@required this.bloc});
   @override
   _KitchenHistoryScreenState createState() => _KitchenHistoryScreenState();
 }
@@ -158,7 +162,7 @@ class _KitchenHistoryScreenState extends State<KitchenHistoryScreen>
                       child: Container(
                           color: Colors.white,
                           width: MediaQuery.of(context).size.width,
-                          child: KitchenHistoryDetailScreen()),
+                          child: KitchenHistoryDetailScreen(bloc: widget.bloc)),
                     )
                   ],
                 ),
