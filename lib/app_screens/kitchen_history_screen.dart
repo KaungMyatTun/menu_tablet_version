@@ -121,7 +121,7 @@ class _KitchenHistoryScreenState extends State<KitchenHistoryScreen>
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  "T3",
+                                  selectedIndex.toString(),
                                   style: TextStyle(
                                       color: HexColor(textColor),
                                       fontWeight: FontWeight.bold,
@@ -172,7 +172,7 @@ class _KitchenHistoryScreenState extends State<KitchenHistoryScreen>
     ));
 }
 _secondPanel() {
-    List<int> gridItem = [for (int i = 0; i < 1; i++) i];
+    List<int> gridItem = [for (int i = 0; i < 2; i++) i];
     List<Widget> gvCard = List();
     gridItem.forEach((item) {
       gvCard.add(Column(

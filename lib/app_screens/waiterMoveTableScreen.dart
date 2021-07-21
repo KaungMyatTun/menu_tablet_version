@@ -4,12 +4,12 @@ import 'package:menu_tablet/util/Constants.dart';
 import 'package:menu_tablet/widgets/dialog_manager.dart';
 import 'package:menu_tablet/widgets/rs_btn.dart';
 
-class WaiterMergeTableScreen extends StatefulWidget {
+class WaiterMoveTableScreen extends StatefulWidget {
   @override
-  _WaiterMergeTableScreenState createState() => _WaiterMergeTableScreenState();
+  _WaiterMoveTableScreenState createState() => _WaiterMoveTableScreenState();
 }
 
-class _WaiterMergeTableScreenState extends State<WaiterMergeTableScreen> {
+class _WaiterMoveTableScreenState extends State<WaiterMoveTableScreen> {
   @override
   Widget build(BuildContext context) {
     return CupertinoScrollbar(
@@ -24,7 +24,7 @@ class _WaiterMergeTableScreenState extends State<WaiterMergeTableScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Text(
-                  "Merge Tables",
+                  "Move Tables",
                   style: TextStyle(
                       fontSize: titleFontSize, fontWeight: FontWeight.bold),
                 ),
@@ -45,14 +45,14 @@ class _WaiterMergeTableScreenState extends State<WaiterMergeTableScreen> {
         onTap: () {
           print(item);
           DialogManager dm = new DialogManager();
-          dm.mergeTableAlertDialog(context, "T0", "T9", "Cancel", "Sure");
+          dm.moveTableAlertDialog(context, "T0", "T9", "Cancel", "Sure");
         },
         child: Container(
           height: 80,
           margin: EdgeInsets.all(10),
           child: RsBtn(
             fun: null,
-            colorString: secondaryColor,
+            colorString: orderCardColor,
             btnTxt: "T${item.toString()}",
           ),
         ),

@@ -2,6 +2,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:menu_tablet/app_screens/logout_screen.dart';
 import 'package:menu_tablet/app_screens/waiter_order_screen.dart';
+import 'package:menu_tablet/app_screens/watier_table_screen.dart';
 import 'package:menu_tablet/bloc/menu_tablet_main_bloc.dart';
 import 'package:menu_tablet/util/Constants.dart';
 import 'package:menu_tablet/util/HexColor.dart';
@@ -135,7 +136,7 @@ class _WaiterHomeScreenState extends State<WaiterHomeScreen> {
         }
         break;
       case 1:
-        return Container();
+        return WaiterTableScreen(bloc: widget.bloc);
         break;
       case 2:
         return LogoutScreen();

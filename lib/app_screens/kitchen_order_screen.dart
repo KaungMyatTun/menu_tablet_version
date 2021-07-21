@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:menu_tablet/app_screens/kitchen_order_detail_screen.dart';
 import 'package:menu_tablet/bloc/menu_tablet_main_bloc.dart';
@@ -41,25 +42,28 @@ class _KitchenOrderScreenState extends State<KitchenOrderScreen>
         // second panel
         Expanded(
             flex: 4,
-            child: Container(
-              height: MediaQuery.of(context).size.height,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border(left: BorderSide(color: HexColor("DEDEDE")))),
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: expandController.value == 0.0
-                        ? CrossAxisAlignment.start
-                        : CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(height: 10),
-                      Wrap(
-                        children: _secondPanel(),
-                      )
-                    ],
+            child: CupertinoScrollbar(
+              child: Container(
+                height: MediaQuery.of(context).size.height,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    border:
+                        Border(left: BorderSide(color: HexColor("DEDEDE")))),
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: expandController.value == 0.0
+                          ? CrossAxisAlignment.start
+                          : CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(height: 10),
+                        Wrap(
+                          children: _secondPanel(),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -119,7 +123,9 @@ class _KitchenOrderScreenState extends State<KitchenOrderScreen>
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  "T3",
+                                  selectedIndex != null
+                                      ? selectedIndex.toString()
+                                      : "",
                                   style: TextStyle(
                                       color: HexColor(textColor),
                                       fontWeight: FontWeight.bold,
@@ -160,7 +166,10 @@ class _KitchenOrderScreenState extends State<KitchenOrderScreen>
                       child: Container(
                           color: Colors.white,
                           width: MediaQuery.of(context).size.width,
-                          child: KitchenOrderDetailScreen(bloc: widget.bloc,tableId: selectedIndex,)),
+                          child: KitchenOrderDetailScreen(
+                            bloc: widget.bloc,
+                            tableId: selectedIndex,
+                          )),
                     )
                   ],
                 ),
@@ -201,6 +210,7 @@ class _KitchenOrderScreenState extends State<KitchenOrderScreen>
                     expandController.forward();
                   }
                   selectedIndex = item;
+                  widget.bloc.kitchenThirdPageReloadSink.add(true);
                 });
               },
               child: Container(

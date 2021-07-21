@@ -8,6 +8,7 @@ class RoundedButton extends StatelessWidget {
   final bool isClickable;
   final String colorString;
   final double radius;
+  final double width;
 
   RoundedButton({
     @required this.onPressed,
@@ -15,6 +16,7 @@ class RoundedButton extends StatelessWidget {
     this.isClickable = true,
     this.colorString,
     this.radius = 0.0,
+    this.width =  double.infinity,
   });
 
   @override
@@ -23,7 +25,7 @@ class RoundedButton extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 12.0),
       child: Container(
         height: 40,
-        width: double.infinity,
+        width: 100,
         child: RaisedButton(
           shape: new RoundedRectangleBorder(
               borderRadius: new BorderRadius.circular(5)),

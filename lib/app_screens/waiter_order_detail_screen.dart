@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:menu_tablet/app_screens/waiterMoveTableScreen.dart';
 import 'package:menu_tablet/app_screens/waiter_merge_table_screen.dart';
 import 'package:menu_tablet/bloc/menu_tablet_main_bloc.dart';
 import 'package:menu_tablet/util/Constants.dart';
 import 'package:menu_tablet/util/HexColor.dart';
 import 'package:menu_tablet/util/rounded_button.dart';
 import 'package:menu_tablet/widgets/bottom_text_widget.dart';
+import 'package:menu_tablet/widgets/plus_minus_widget.dart';
 import 'package:menu_tablet/widgets/rs_btn.dart';
 
 class WaiterOrderDetailScreen extends StatefulWidget {
@@ -21,8 +23,9 @@ class WaiterOrderDetailScreen extends StatefulWidget {
 
 class _WaiterOrderDetailScreenState extends State<WaiterOrderDetailScreen> {
   List<int> selectedItem = new List();
-  bool editMenuFlag = false;
-  int contentIdForThirdPanel = 0; // 0 for menu item list, 1 for merge tables, 2 for move table
+  int contentIdForThirdPanel =
+      0; // 0 for menu item list, 1 for merge tables, 2 for move table
+  int i = 0;
 
   @override
   void initState() {
@@ -46,7 +49,7 @@ class _WaiterOrderDetailScreenState extends State<WaiterOrderDetailScreen> {
         return WaiterMergeTableScreen();
         break;
       case 2:
-        return Container();
+        return WaiterMoveTableScreen();
         break;
     }
   }
@@ -59,7 +62,8 @@ class _WaiterOrderDetailScreenState extends State<WaiterOrderDetailScreen> {
         builder: (content, snapshot) {
           if (snapshot.data) {
             contentIdForThirdPanel = 0;
-            editMenuFlag = false;
+            widget.bloc.editMenuSink.add(false);
+            widget.bloc.saveFirst(false);
           }
           return Container(
               child: Padding(
@@ -74,7 +78,7 @@ class _WaiterOrderDetailScreenState extends State<WaiterOrderDetailScreen> {
                       Container(
                         height: 80,
                         margin: const EdgeInsets.symmetric(
-                            horizontal: 0.0, vertical: 8.0),
+                            horizontal: 5.0, vertical: 8.0),
                         color: Colors.white,
                         child: CupertinoScrollbar(
                           child: ListView(
@@ -148,20 +152,33 @@ class _WaiterOrderDetailScreenState extends State<WaiterOrderDetailScreen> {
                   ),
                 ),
               ),
-              editMenuFlag
-                  ? Container(
-                      width: 100,
-                      height: 55,
-                      child: RoundedButton(
-                        onPressed: () {
-                          setState(() {
-                            editMenuFlag = false;
-                          });
-                        },
-                        text: "Save",
-                        colorString: primaryColor,
-                      ))
-                  : Container()
+              StreamBuilder(
+                stream: widget.bloc.editMenuStream,
+                initialData: false,
+                builder: (context, snapshot) {
+                  if (snapshot.data) {
+                    if (widget.animationController.value == 0.0) {
+                      return Container();
+                    } else {
+                      return Container(
+                          width: 100,
+                          height: 55,
+                          child: RoundedButton(
+                            onPressed: () {
+                              setState(() {
+                                widget.bloc.editMenuSink.add(false);
+                                widget.bloc.saveFirst(false);
+                              });
+                            },
+                            text: "Save",
+                            colorString: primaryColor,
+                          ));
+                    }
+                  } else {
+                    return Container();
+                  }
+                },
+              )
             ],
           ),
         ),
@@ -270,15 +287,25 @@ class _WaiterOrderDetailScreenState extends State<WaiterOrderDetailScreen> {
                           fontWeight: FontWeight.bold)),
                 ),
                 SizedBox(width: 10),
-                editMenuFlag
-                    ? plusMinusItemWidget(2)
-                    : Text(
+                StreamBuilder(
+                  stream: widget.bloc.editMenuStream,
+                  initialData: false,
+                  builder: (context, snapshot) {
+                    if (snapshot.data) {
+                      return PlusMinusWidget(
+                        itemCount: i,
+                      );
+                    } else {
+                      return Text(
                         "x2",
                         style: TextStyle(
                             color: HexColor(textColor),
                             fontSize: titleFontSize,
                             fontWeight: FontWeight.bold),
-                      ),
+                      );
+                    }
+                  },
+                )
               ],
             )
           ],
@@ -288,82 +315,18 @@ class _WaiterOrderDetailScreenState extends State<WaiterOrderDetailScreen> {
     return gvCard;
   }
 
-  plusMinusItemWidget(int itemCount) {
-    int i = 0;
-    return Row(
-      children: [
-        InkWell(
-          onTap: () {
-            setState(() {
-              i--;
-            });
-          },
-          child: Container(
-            width: 30,
-            decoration: BoxDecoration(
-                color: HexColor(primaryColor),
-                border: Border.all(color: HexColor("#DEDEDE")),
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    bottomLeft: Radius.circular(10))),
-            child: Text(
-              "-",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: titleFontSize,
-                  fontWeight: FontWeight.bold),
-            ),
-          ),
-        ),
-        Container(
-          width: 30,
-          child: Center(
-            child: Text("$i",
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: titleFontSize,
-                    fontWeight: FontWeight.bold)),
-          ),
-        ),
-        InkWell(
-          onTap: () {
-            setState(() {
-              i = 1;
-            });
-          },
-          child: Container(
-            width: 30,
-            decoration: BoxDecoration(
-                color: HexColor(primaryColor),
-                border: Border.all(color: HexColor("#DEDEDE")),
-                borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(10),
-                    bottomRight: Radius.circular(10))),
-            child: Text(
-              "+",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: titleFontSize,
-                  fontWeight: FontWeight.bold),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
   viewMenusFun() {
     setState(() {
       contentIdForThirdPanel = 0;
-      editMenuFlag = false;
+      widget.bloc.editMenuSink.add(false);
+      widget.bloc.saveFirst(false);
     });
   }
 
   editMenusFun() {
     setState(() {
-      editMenuFlag = true;
+      widget.bloc.editMenuSink.add(true);
+      widget.bloc.saveFirst(true);
       widget.bloc.waiterThirdPageReloadSink.add(false);
     });
   }

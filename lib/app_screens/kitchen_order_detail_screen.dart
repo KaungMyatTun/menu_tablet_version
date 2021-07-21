@@ -10,7 +10,7 @@ import 'package:menu_tablet/widgets/rs_btn.dart';
 class KitchenOrderDetailScreen extends StatefulWidget {
   final MenuTabletMainBloc bloc;
   final int tableId;
-  KitchenOrderDetailScreen({@required this.bloc,@required this.tableId});
+  KitchenOrderDetailScreen({@required this.bloc, @required this.tableId});
   @override
   _KitchenOrderDetailScreenState createState() =>
       _KitchenOrderDetailScreenState();
@@ -23,78 +23,96 @@ class _KitchenOrderDetailScreenState extends State<KitchenOrderDetailScreen> {
     super.initState();
   }
 
+  pageRefresh() {
+    widget.bloc.kitchenThirdPageReloadSink.add(false);
+    selectedItem.clear();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-        child: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 0.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text(
-              "Pending... ${widget.tableId}",
-              style: TextStyle(
-                  fontSize: tableNumberFontSize, fontWeight: FontWeight.bold),
-            ),
-          ),
-          SizedBox(height: 10),
-          Expanded(
-            child: Container(
-              color: Colors.white,
-              child: CupertinoScrollbar(
-                child: SingleChildScrollView(
-                  child: Wrap(
-                    children: createItemList(),
+    return StreamBuilder(
+      stream: widget.bloc.kitchenThirdPageReloadStream,
+      initialData: false,
+      builder: (context, snapshot) {
+        if (snapshot.data) {
+          pageRefresh();
+        }
+        return Container(
+            child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 0.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Text(
+                  "Pending... ${widget.tableId != null ? widget.tableId : ""}",
+                  style: TextStyle(
+                      fontSize: tableNumberFontSize,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+              SizedBox(height: 10),
+              Expanded(
+                child: Container(
+                  color: Colors.white,
+                  child: CupertinoScrollbar(
+                    child: SingleChildScrollView(
+                      child: Wrap(
+                        children: createItemList(),
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ),
-          Divider(
-            color: HexColor(separatorColor),
-            thickness: 1.5,
-          ),
-          Container(
-            height: 80,
-            margin: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 8.0),
-            color: Colors.white,
-            child: CupertinoScrollbar(
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  SizedBox(width: 10),
-                  RsBtn(
-                    fun: null,
-                    btnTxt: "Preparing",
-                    colorString: preparingBtnColor,
-                  ),
-                  SizedBox(width: 10),
-                  RsBtn(
-                    fun: null,
-                    btnTxt: "Cooking",
-                    colorString: cookingBtnColor,
-                  ),
-                  SizedBox(width: 10),
-                  RsBtn(
-                    fun: null,
-                    btnTxt: "Ready To Serve",
-                    colorString: readyBtnColor,
-                  ),
-                  SizedBox(width: 10),
-                  RsBtn(
-                    fun: null,
-                    btnTxt: "Done",
-                    colorString: doneBtnColor,
-                  ),
-                ],
+              Divider(
+                color: HexColor(separatorColor),
+                thickness: 1.5,
               ),
-            ),
-          )
-        ],
-      ),
-    ));
+              SafeArea(
+                child: Container(
+                  height: 80,
+                  margin: const EdgeInsets.symmetric(
+                      horizontal: 5.0, vertical: 5.0),
+                  color: Colors.white,
+                  child: CupertinoScrollbar(
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: [
+                        SizedBox(width: 10),
+                        RsBtn(
+                          fun: null,
+                          btnTxt: "Preparing",
+                          colorString: preparingBtnColor,
+                        ),
+                        SizedBox(width: 10),
+                        RsBtn(
+                          fun: null,
+                          btnTxt: "Cooking",
+                          colorString: cookingBtnColor,
+                        ),
+                        SizedBox(width: 10),
+                        RsBtn(
+                          fun: null,
+                          btnTxt: "Ready To Serve",
+                          colorString: readyBtnColor,
+                        ),
+                        SizedBox(width: 10),
+                        RsBtn(
+                          fun: null,
+                          btnTxt: "Done",
+                          colorString: doneBtnColor,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ));
+      },
+    );
   }
 
   createItemList() {

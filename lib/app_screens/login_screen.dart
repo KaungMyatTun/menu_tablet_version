@@ -114,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 //     PageTransition(
                                 //         duration: Duration(milliseconds: 500),
                                 //         type: PageTransitionType.rightToLeft,
-                                //         child: KitchenHomeScreen()));
+                                //         child: KitchenHomeScreen(bloc: widget.bloc)));
                                 Navigator.pushReplacement(
                                     context,
                                     PageTransition(
