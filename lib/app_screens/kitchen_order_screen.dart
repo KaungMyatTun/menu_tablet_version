@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:menu_tablet/app_screens/kitchen_order_detail_screen.dart';
 import 'package:menu_tablet/bloc/menu_tablet_main_bloc.dart';
+import 'package:menu_tablet/network/model/selected_order_model.dart';
 import 'package:menu_tablet/util/Constants.dart';
 import 'package:menu_tablet/util/HexColor.dart';
 import 'package:menu_tablet/widgets/kitchen_order_card_content.dart';
@@ -123,16 +124,14 @@ class _KitchenOrderScreenState extends State<KitchenOrderScreen>
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  selectedIndex != null
-                                      ? selectedIndex.toString()
-                                      : "",
+                                  widget.bloc.selectedOrderModel.tableId,
                                   style: TextStyle(
                                       color: HexColor(textColor),
                                       fontWeight: FontWeight.bold,
                                       fontSize: tableNumberFontSize),
                                 ),
                                 Text(
-                                  "Order ID : #12332",
+                                  widget.bloc.selectedOrderModel.orderId,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
@@ -211,6 +210,11 @@ class _KitchenOrderScreenState extends State<KitchenOrderScreen>
                   }
                   selectedIndex = item;
                   widget.bloc.kitchenThirdPageReloadSink.add(true);
+                   // set selected table to bloc
+                  SelectedOrderModel model = new SelectedOrderModel();
+                  model.tableId = item.toString();
+                  model.orderId = "Order ID: 2222222";
+                  widget.bloc.selectedOrderModel = model;
                 });
               },
               child: Container(

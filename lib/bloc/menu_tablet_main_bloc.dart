@@ -1,9 +1,11 @@
+import 'package:menu_tablet/network/model/selected_order_model.dart';
 import 'package:rxdart/rxdart.dart';
 
 class MenuTabletMainBloc {
   bool showFirstPageOnWaiter = false;
   int indexOfPageOnWaiter = 0;
   bool toShowSaveFirst = false;
+  SelectedOrderModel selectedOrderModel = new SelectedOrderModel();
 
   // main pager
   final _waiterThirdPageReloadSubject = PublishSubject<bool>();

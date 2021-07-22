@@ -1,19 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:menu_tablet/bloc/menu_tablet_main_bloc.dart';
+import 'package:menu_tablet/network/model/selected_order_model.dart';
 import 'package:menu_tablet/util/Constants.dart';
 import 'package:menu_tablet/util/HexColor.dart';
 import 'package:menu_tablet/widgets/waiter_order_card_content.dart';
 
 class WaiterSecondPanelWithTableDetail extends StatefulWidget {
   final AnimationController expandController;
-  WaiterSecondPanelWithTableDetail({@required this.expandController});
+  final MenuTabletMainBloc bloc;
+  WaiterSecondPanelWithTableDetail(
+      {@required this.expandController, @required this.bloc});
   @override
-  _WaiterSecondPanelWithTableDetailState createState() => _WaiterSecondPanelWithTableDetailState();
+  _WaiterSecondPanelWithTableDetailState createState() =>
+      _WaiterSecondPanelWithTableDetailState();
 }
 
-class _WaiterSecondPanelWithTableDetailState extends State<WaiterSecondPanelWithTableDetail> {
+class _WaiterSecondPanelWithTableDetailState
+    extends State<WaiterSecondPanelWithTableDetail> {
   @override
   Widget build(BuildContext context) {
-    return Wrap(children: _secondPanelWithTableDetail(),);
+    return Wrap(
+      children: _secondPanelWithTableDetail(),
+    );
   }
 
   _secondPanelWithTableDetail() {
@@ -46,6 +54,14 @@ class _WaiterSecondPanelWithTableDetailState extends State<WaiterSecondPanelWith
                   if (widget.expandController.value == 0.0) {
                     widget.expandController.forward();
                   }
+                  // set the selected table to bloc
+                  SelectedOrderModel model = new SelectedOrderModel();
+                  model.tableId = item.toString();
+                  model.orderId = "Order ID: 1111111";
+                  widget.bloc.selectedOrderModel = model;
+
+                  // reload the third panel
+                  widget.bloc.waiterThirdPageReloadSink.add(true);
                 });
               },
               child: Container(

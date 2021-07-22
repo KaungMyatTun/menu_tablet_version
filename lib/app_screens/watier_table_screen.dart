@@ -1,8 +1,10 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:menu_tablet/app_screens/waiter_order_detail_screen.dart';
 import 'package:menu_tablet/bloc/menu_tablet_main_bloc.dart';
 import 'package:menu_tablet/util/Constants.dart';
 import 'package:menu_tablet/util/HexColor.dart';
+import 'package:menu_tablet/widgets/dialog_manager.dart';
 import 'package:menu_tablet/widgets/waiter_second_panel_with_table_detail.dart';
 import 'package:menu_tablet/widgets/waiter_second_panel_with_table_name.dart';
 
@@ -58,7 +60,7 @@ class _WaiterTableScreenState extends State<WaiterTableScreen>
                           : CrossAxisAlignment.start,
                       children: [
                         SizedBox(height: 10),
-                        // table lable
+                        // table label
                         StreamBuilder(
                           stream: widget.bloc.showWaiterTableDetailScreenStream,
                           initialData: false,
@@ -71,11 +73,25 @@ class _WaiterTableScreenState extends State<WaiterTableScreen>
                                   snapshot.data
                                       ? InkWell(
                                           onTap: () {
-                                            setState(() {
-                                              widget.bloc
-                                                  .showWaiterTableDetailScreenSink
-                                                  .add(false);
-                                            });
+                                            if (widget.bloc.toShowSaveFirst) {
+                                              _showSaveFirstDialog();
+                                            } else {
+                                              if (expandController.value !=
+                                                  0.0) {
+                                                expandController.reverse();
+                                                setState(() {
+                                                  widget.bloc
+                                                      .showWaiterTableDetailScreenSink
+                                                      .add(false);
+                                                });
+                                              } else {
+                                                setState(() {
+                                                  widget.bloc
+                                                      .showWaiterTableDetailScreenSink
+                                                      .add(false);
+                                                });
+                                              }
+                                            }
                                           },
                                           child: Container(
                                               decoration: BoxDecoration(
@@ -113,6 +129,7 @@ class _WaiterTableScreenState extends State<WaiterTableScreen>
                             return snapshot.data
                                 ? WaiterSecondPanelWithTableDetail(
                                     expandController: expandController,
+                                    bloc: widget.bloc,
                                   )
                                 : WaiterSecondPanelWithTableName(
                                     bloc: widget.bloc);
@@ -143,14 +160,18 @@ class _WaiterTableScreenState extends State<WaiterTableScreen>
                             children: [
                               InkWell(
                                   onTap: () {
-                                    if (expandController.value == 0.0) {
-                                      expandController.forward();
+                                    if (widget.bloc.toShowSaveFirst) {
+                                      _showSaveFirstDialog();
                                     } else {
-                                      expandController.reverse();
+                                      if (expandController.value == 0.0) {
+                                        expandController.forward();
+                                      } else {
+                                        expandController.reverse();
+                                      }
+                                      setState(() {
+                                        selectedIndex = null;
+                                      });
                                     }
-                                    setState(() {
-                                      selectedIndex = null;
-                                    });
                                   },
                                   child: Align(
                                       alignment: Alignment.centerLeft,
@@ -182,14 +203,14 @@ class _WaiterTableScreenState extends State<WaiterTableScreen>
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                        selectedIndex.toString(),
+                                        widget.bloc.selectedOrderModel.tableId,
                                         style: TextStyle(
                                             color: HexColor(textColor),
                                             fontWeight: FontWeight.bold,
                                             fontSize: tableNumberFontSize),
                                       ),
                                       Text(
-                                        "Order ID : #12332",
+                                        widget.bloc.selectedOrderModel.orderId,
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
@@ -237,5 +258,12 @@ class _WaiterTableScreenState extends State<WaiterTableScreen>
         ],
       ),
     );
+  }
+
+  // show save first dialog fun
+  _showSaveFirstDialog() {
+    DialogManager dm = new DialogManager();
+    dm.alertDialog(context, DialogType.WARNING, "OK",
+        "Please save your menu edition first");
   }
 }
