@@ -102,9 +102,9 @@ class _KitchenHistoryScreenState extends State<KitchenHistoryScreen>
                                       color: HexColor(primaryColor),
                                     ),
                                     margin: EdgeInsets.only(
-                                      top: 10,
-                                      left: 10,
-                                      right: 10,
+                                      top: 8,
+                                      left: 16,
+                                      right: 8,
                                     ),
                                     width: 30,
                                     height: 30,

@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:menu_tablet/app_screens/kitchen_history_detail_screen.dart';
 import 'package:menu_tablet/bloc/menu_tablet_main_bloc.dart';
 import 'package:menu_tablet/util/Constants.dart';
 import 'package:menu_tablet/util/HexColor.dart';
@@ -10,7 +9,11 @@ import 'package:menu_tablet/widgets/rs_btn.dart';
 class KitchenOrderDetailScreen extends StatefulWidget {
   final MenuTabletMainBloc bloc;
   final int tableId;
-  KitchenOrderDetailScreen({@required this.bloc, @required this.tableId});
+  final AnimationController expandController;
+  KitchenOrderDetailScreen(
+      {@required this.bloc,
+      @required this.tableId,
+      @required this.expandController});
   @override
   _KitchenOrderDetailScreenState createState() =>
       _KitchenOrderDetailScreenState();
@@ -38,79 +41,76 @@ class _KitchenOrderDetailScreenState extends State<KitchenOrderDetailScreen> {
           pageRefresh();
         }
         return Container(
-            child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 0.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Text(
-                  "Pending... ${widget.tableId != null ? widget.tableId : ""}",
-                  style: TextStyle(
-                      fontSize: tableNumberFontSize,
-                      fontWeight: FontWeight.bold),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Text(
+                    "Pending... ${widget.tableId != null ? widget.tableId : ""}",
+                    style: TextStyle(
+                        fontSize: tableNumberFontSize,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
-              ),
-              SizedBox(height: 10),
-              Expanded(
-                child: Container(
-                  color: Colors.white,
-                  child: CupertinoScrollbar(
-                    child: SingleChildScrollView(
-                      child: Wrap(
-                        children: createItemList(),
+                SizedBox(height: 10),
+                Expanded(
+                  child: Container(
+                    color: Colors.white,
+                    child: CupertinoScrollbar(
+                      child: SingleChildScrollView(
+                        child: Wrap(
+                          children: createItemList(),
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              Divider(
-                color: HexColor(separatorColor),
-                thickness: 1.5,
-              ),
-              SafeArea(
-                child: Container(
-                  height: 80,
-                  margin: const EdgeInsets.symmetric(
-                      horizontal: 5.0, vertical: 5.0),
-                  color: Colors.white,
-                  child: CupertinoScrollbar(
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        SizedBox(width: 10),
-                        RsBtn(
-                          fun: null,
-                          btnTxt: "Preparing",
-                          colorString: preparingBtnColor,
-                        ),
-                        SizedBox(width: 10),
-                        RsBtn(
-                          fun: null,
-                          btnTxt: "Cooking",
-                          colorString: cookingBtnColor,
-                        ),
-                        SizedBox(width: 10),
-                        RsBtn(
-                          fun: null,
-                          btnTxt: "Ready To Serve",
-                          colorString: readyBtnColor,
-                        ),
-                        SizedBox(width: 10),
-                        RsBtn(
-                          fun: null,
-                          btnTxt: "Done",
-                          colorString: doneBtnColor,
-                        ),
-                      ],
+                Divider(
+                  color: HexColor(separatorColor),
+                  thickness: 1.5,
+                ),
+                SafeArea(
+                  child: Container(
+                    height: 80,
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 5.0, vertical: 5.0),
+                    color: Colors.white,
+                    child: CupertinoScrollbar(
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: [
+                          SizedBox(width: 10),
+                          RsBtn(
+                            fun: prepareFun,
+                            btnTxt: "Preparing",
+                            colorString: preparingBtnColor,
+                          ),
+                          SizedBox(width: 10),
+                          RsBtn(
+                            fun: cookingFun,
+                            btnTxt: "Cooking",
+                            colorString: cookingBtnColor,
+                          ),
+                          SizedBox(width: 10),
+                          RsBtn(
+                            fun: readyToServe,
+                            btnTxt: "Ready To Serve",
+                            colorString: readyBtnColor,
+                          ),
+                          SizedBox(width: 10),
+                          RsBtn(
+                            fun: doneFun,
+                            btnTxt: "Done",
+                            colorString: doneBtnColor,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              )
-            ],
-          ),
-        ));
+                )
+              ],
+            ));
       },
     );
   }
@@ -132,8 +132,8 @@ class _KitchenOrderDetailScreenState extends State<KitchenOrderDetailScreen> {
           });
         },
         child: Container(
-          padding: EdgeInsets.all(10.0),
-          margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+          padding: EdgeInsets.all(8.0),
+          margin: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
           height: 100,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
@@ -204,5 +204,16 @@ class _KitchenOrderDetailScreenState extends State<KitchenOrderDetailScreen> {
       ));
     }));
     return gvCard;
+  }
+
+  prepareFun() {}
+  cookingFun() {}
+  readyToServe() {}
+  doneFun() {
+    if (widget.expandController.value == 0.0) {
+      widget.expandController.forward();
+    } else {
+      widget.expandController.reverse();
+    }
   }
 }

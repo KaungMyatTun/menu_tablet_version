@@ -22,7 +22,8 @@ class _WaiterMergeTableScreenState extends State<WaiterMergeTableScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8),
                 child: Text(
                   "Merge Tables",
                   style: TextStyle(
@@ -49,7 +50,7 @@ class _WaiterMergeTableScreenState extends State<WaiterMergeTableScreen> {
         },
         child: Container(
           height: 80,
-          margin: EdgeInsets.all(10),
+          margin: EdgeInsets.all(8),
           child: RsBtn(
             fun: null,
             colorString: secondaryColor,

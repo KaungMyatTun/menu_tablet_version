@@ -109,18 +109,18 @@ class _LoginScreenState extends State<LoginScreen> {
                           RoundedButton(
                             onPressed: () {
                               if (_formKey.currentState.validate()) {
-                                // Navigator.pushReplacement(
-                                //     context,
-                                //     PageTransition(
-                                //         duration: Duration(milliseconds: 500),
-                                //         type: PageTransitionType.rightToLeft,
-                                //         child: KitchenHomeScreen(bloc: widget.bloc)));
                                 Navigator.pushReplacement(
                                     context,
                                     PageTransition(
                                         duration: Duration(milliseconds: 500),
                                         type: PageTransitionType.rightToLeft,
-                                        child: WaiterHomeScreen(bloc: widget.bloc,)));
+                                        child: KitchenHomeScreen(bloc: widget.bloc)));
+                                // Navigator.pushReplacement(
+                                //     context,
+                                //     PageTransition(
+                                //         duration: Duration(milliseconds: 500),
+                                //         type: PageTransitionType.rightToLeft,
+                                //         child: WaiterHomeScreen(bloc: widget.bloc,)));
                               }
                             },
                             text: "CONTINUE",

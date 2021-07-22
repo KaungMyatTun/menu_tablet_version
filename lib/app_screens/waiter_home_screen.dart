@@ -37,6 +37,7 @@ class _WaiterHomeScreenState extends State<WaiterHomeScreen> {
         ),
       ),
       body: Container(
+        color: Colors.white,
         child: Row(
           children: [
             Expanded(
@@ -86,9 +87,13 @@ class _WaiterHomeScreenState extends State<WaiterHomeScreen> {
         SizedBox(height: 30),
         InkWell(
             onTap: () {
-              setState(() {
-                chosenIndexForSecondPanel = 0;
-              });
+              if (widget.bloc.toShowSaveFirst) {
+                _showSaveFirstDialog();
+              } else {
+                setState(() {
+                  chosenIndexForSecondPanel = 0;
+                });
+              }
             },
             child: WaiterSideBarButton(
                 iconData: Icons.login,
@@ -97,9 +102,13 @@ class _WaiterHomeScreenState extends State<WaiterHomeScreen> {
         SizedBox(height: 20),
         InkWell(
             onTap: () {
-              setState(() {
-                chosenIndexForSecondPanel = 1;
-              });
+              if (widget.bloc.toShowSaveFirst) {
+                _showSaveFirstDialog();
+              } else {
+                setState(() {
+                  chosenIndexForSecondPanel = 1;
+                });
+              }
             },
             child: WaiterSideBarButton(
                 iconData: Icons.login,
@@ -108,12 +117,16 @@ class _WaiterHomeScreenState extends State<WaiterHomeScreen> {
         SizedBox(height: 20),
         InkWell(
             onTap: () {
-              setState(() {
-                chosenIndexForSecondPanel = 2;
-                DialogManager dm = new DialogManager();
-                dm.yesorNoButtonDialog(context, "Are you sure to logout?", "OK",
-                    "Cancel", DialogType.QUESTION);
-              });
+              if (widget.bloc.toShowSaveFirst) {
+                _showSaveFirstDialog();
+              } else {
+                setState(() {
+                  chosenIndexForSecondPanel = 2;
+                  DialogManager dm = new DialogManager();
+                  dm.yesorNoButtonDialog(context, "Are you sure to logout?",
+                      "OK", "Cancel", DialogType.QUESTION);
+                });
+              }
             },
             child: WaiterSideBarButton(
                 iconData: Icons.logout,
@@ -142,5 +155,12 @@ class _WaiterHomeScreenState extends State<WaiterHomeScreen> {
         return LogoutScreen();
         break;
     }
+  }
+
+  // show save first dialog fun
+  _showSaveFirstDialog() {
+    DialogManager dm = new DialogManager();
+    dm.alertDialog(context, DialogType.WARNING, "OK",
+        "Please save your menu edition first");
   }
 }

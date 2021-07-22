@@ -60,8 +60,10 @@ class _KitchenOrderScreenState extends State<KitchenOrderScreen>
                           : CrossAxisAlignment.center,
                       children: [
                         SizedBox(height: 10),
-                        Wrap(
-                          children: _secondPanel(),
+                        SafeArea(
+                          child: Wrap(
+                            children: _secondPanel(),
+                          ),
                         )
                       ],
                     ),
@@ -104,9 +106,9 @@ class _KitchenOrderScreenState extends State<KitchenOrderScreen>
                                       color: HexColor(primaryColor),
                                     ),
                                     margin: EdgeInsets.only(
-                                      top: 10,
-                                      left: 10,
-                                      right: 10,
+                                      top: 8,
+                                      left: 16,
+                                      right: 8,
                                     ),
                                     width: 30,
                                     height: 30,
@@ -124,14 +126,18 @@ class _KitchenOrderScreenState extends State<KitchenOrderScreen>
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  widget.bloc.selectedOrderModel.tableId,
+                                  selectedIndex != null
+                                      ? widget.bloc.selectedOrderModel.tableId
+                                      : "",
                                   style: TextStyle(
                                       color: HexColor(textColor),
                                       fontWeight: FontWeight.bold,
                                       fontSize: tableNumberFontSize),
                                 ),
                                 Text(
-                                  widget.bloc.selectedOrderModel.orderId,
+                                  selectedIndex != null
+                                      ? widget.bloc.selectedOrderModel.orderId
+                                      : "",
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
@@ -168,6 +174,7 @@ class _KitchenOrderScreenState extends State<KitchenOrderScreen>
                           child: KitchenOrderDetailScreen(
                             bloc: widget.bloc,
                             tableId: selectedIndex,
+                            expandController: expandController,
                           )),
                     )
                   ],
@@ -210,7 +217,7 @@ class _KitchenOrderScreenState extends State<KitchenOrderScreen>
                   }
                   selectedIndex = item;
                   widget.bloc.kitchenThirdPageReloadSink.add(true);
-                   // set selected table to bloc
+                  // set selected table to bloc
                   SelectedOrderModel model = new SelectedOrderModel();
                   model.tableId = item.toString();
                   model.orderId = "Order ID: 2222222";

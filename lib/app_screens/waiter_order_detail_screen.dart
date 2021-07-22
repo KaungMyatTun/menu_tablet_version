@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:menu_tablet/app_screens/waiterMoveTableScreen.dart';
@@ -7,6 +8,7 @@ import 'package:menu_tablet/util/Constants.dart';
 import 'package:menu_tablet/util/HexColor.dart';
 import 'package:menu_tablet/util/rounded_button.dart';
 import 'package:menu_tablet/widgets/bottom_text_widget.dart';
+import 'package:menu_tablet/widgets/dialog_manager.dart';
 import 'package:menu_tablet/widgets/plus_minus_widget.dart';
 import 'package:menu_tablet/widgets/rs_btn.dart';
 
@@ -65,69 +67,71 @@ class _WaiterOrderDetailScreenState extends State<WaiterOrderDetailScreen> {
             widget.bloc.editMenuSink.add(false);
             widget.bloc.saveFirst(false);
           }
-          return Container(
-              child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                  child: Column(
-                    children: [
-                      Expanded(child: contentOnThirdPanel()),
-                      Divider(
-                        color: HexColor(separatorColor),
-                        thickness: 1.5,
-                      ),
-                      Container(
-                        height: 80,
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 5.0, vertical: 8.0),
-                        color: Colors.white,
-                        child: CupertinoScrollbar(
-                          child: ListView(
-                            scrollDirection: Axis.horizontal,
-                            children: [
-                              contentIdForThirdPanel != 0
-                                  ? SizedBox(width: 10)
-                                  : Container(),
-                              contentIdForThirdPanel != 0
-                                  ? RsBtn(
-                                      fun: viewMenusFun,
-                                      colorString: "#F9C00C",
-                                      btnTxt: "View Menus",
-                                    )
-                                  : Container(),
-                              contentIdForThirdPanel == 0
-                                  ? SizedBox(width: 10)
-                                  : Container(),
-                              contentIdForThirdPanel == 0
-                                  ? RsBtn(
-                                      fun: editMenusFun,
-                                      colorString: "#F9C00C",
-                                      btnTxt: "Edit Menus",
-                                    )
-                                  : Container(),
-                              SizedBox(width: 10),
-                              RsBtn(
-                                fun: mergeTablesFun,
-                                colorString: "#F9C00C",
-                                btnTxt: "Merge Tables",
-                              ),
-                              SizedBox(width: 10),
-                              RsBtn(
-                                fun: moveTableFun,
-                                colorString: "#F9C00C",
-                                btnTxt: "Move Table",
-                              ),
-                              SizedBox(width: 10),
-                              RsBtn(
-                                fun: null,
-                                colorString: doneBtnColor,
-                                btnTxt: "Done",
-                              ),
-                            ],
-                          ),
+          return SafeArea(
+            child: Container(
+                child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                    child: Column(
+                      children: [
+                        Expanded(child: contentOnThirdPanel()),
+                        Divider(
+                          color: HexColor(separatorColor),
+                          thickness: 1.5,
                         ),
-                      )
-                    ],
-                  )));
+                        Container(
+                          height: 80,
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 5.0, vertical: 8.0),
+                          color: Colors.white,
+                          child: CupertinoScrollbar(
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              children: [
+                                contentIdForThirdPanel != 0
+                                    ? SizedBox(width: 10)
+                                    : Container(),
+                                contentIdForThirdPanel != 0
+                                    ? RsBtn(
+                                        fun: viewMenusFun,
+                                        colorString: "#F9C00C",
+                                        btnTxt: "View Menus",
+                                      )
+                                    : Container(),
+                                contentIdForThirdPanel == 0
+                                    ? SizedBox(width: 10)
+                                    : Container(),
+                                contentIdForThirdPanel == 0
+                                    ? RsBtn(
+                                        fun: editMenusFun,
+                                        colorString: "#F9C00C",
+                                        btnTxt: "Edit Menus",
+                                      )
+                                    : Container(),
+                                SizedBox(width: 10),
+                                RsBtn(
+                                  fun: mergeTablesFun,
+                                  colorString: "#F9C00C",
+                                  btnTxt: "Merge Tables",
+                                ),
+                                SizedBox(width: 10),
+                                RsBtn(
+                                  fun: moveTableFun,
+                                  colorString: "#F9C00C",
+                                  btnTxt: "Move Table",
+                                ),
+                                SizedBox(width: 10),
+                                RsBtn(
+                                  fun: doneFun,
+                                  colorString: doneBtnColor,
+                                  btnTxt: "Done",
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    ))),
+          );
         });
   }
 
@@ -332,18 +336,43 @@ class _WaiterOrderDetailScreenState extends State<WaiterOrderDetailScreen> {
   }
 
   mergeTablesFun() {
-    setState(() {
-      contentIdForThirdPanel = 1;
-      widget.bloc.waiterThirdPageReloadSink.add(false);
-    });
+    if (widget.bloc.toShowSaveFirst) {
+      _showSaveFirstDialog();
+    } else {
+      setState(() {
+        contentIdForThirdPanel = 1;
+        widget.bloc.waiterThirdPageReloadSink.add(false);
+      });
+    }
   }
 
   moveTableFun() {
-    setState(() {
-      contentIdForThirdPanel = 2;
-      widget.bloc.waiterThirdPageReloadSink.add(false);
-    });
+    if (widget.bloc.toShowSaveFirst) {
+      _showSaveFirstDialog();
+    } else {
+      setState(() {
+        contentIdForThirdPanel = 2;
+        widget.bloc.waiterThirdPageReloadSink.add(false);
+      });
+    }
   }
 
-  doneFun() {}
+  doneFun() {
+    if (widget.bloc.toShowSaveFirst) {
+      _showSaveFirstDialog();
+    } else {
+      if (widget.animationController.value == 0.0) {
+        widget.animationController.forward();
+      } else {
+        widget.animationController.reverse();
+      }
+    }
+  }
+
+  // show save first dialog fun
+  _showSaveFirstDialog() {
+    DialogManager dm = new DialogManager();
+    dm.alertDialog(context, DialogType.WARNING, "OK",
+        "Please save your menu edition first");
+  }
 }

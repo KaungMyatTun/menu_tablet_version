@@ -19,8 +19,10 @@ class _WaiterSecondPanelWithTableDetailState
     extends State<WaiterSecondPanelWithTableDetail> {
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      children: _secondPanelWithTableDetail(),
+    return SafeArea(
+      child: Wrap(
+        children: _secondPanelWithTableDetail(),
+      ),
     );
   }
 

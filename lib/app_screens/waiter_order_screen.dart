@@ -63,8 +63,10 @@ class _WaiterOrderScreenState extends State<WaiterOrderScreen>
                           : CrossAxisAlignment.center,
                       children: [
                         SizedBox(height: 10),
-                        Wrap(
-                          children: _secondPanel(),
+                        SafeArea(
+                          child: Wrap(
+                            children: _secondPanel(),
+                          ),
                         )
                       ],
                     ),
@@ -119,9 +121,9 @@ class _WaiterOrderScreenState extends State<WaiterOrderScreen>
                                               color: HexColor(primaryColor),
                                             ),
                                             margin: EdgeInsets.only(
-                                              top: 10,
-                                              left: 10,
-                                              right: 10,
+                                              top: 8,
+                                              left: 16,
+                                              right: 8,
                                             ),
                                             width: 30,
                                             height: 30,
@@ -225,19 +227,25 @@ class _WaiterOrderScreenState extends State<WaiterOrderScreen>
               splashColor: Colors.transparent,
               highlightColor: Colors.transparent,
               onTap: () {
-                setState(() {
-                  if (expandController.value == 0.0) {
-                    expandController.forward();
-                  }
-                  // selectedIndex = item;
-                  widget.bloc.waiterThirdPageReloadSink.add(true);
-                  reloadPage = true;
-                  // set selected table to bloc
-                  SelectedOrderModel model = new SelectedOrderModel();
-                  model.tableId = item.toString();
-                  model.orderId = "Order ID: 0000000";
-                  widget.bloc.selectedOrderModel = model;
-                });
+                if (widget.bloc.toShowSaveFirst) {
+                  DialogManager dm = new DialogManager();
+                  dm.alertDialog(context, DialogType.WARNING, "OK",
+                      "Please save your menu edition first");
+                } else {
+                  setState(() {
+                    if (expandController.value == 0.0) {
+                      expandController.forward();
+                    }
+                    // selectedIndex = item;
+                    widget.bloc.waiterThirdPageReloadSink.add(true);
+                    reloadPage = true;
+                    // set selected table to bloc
+                    SelectedOrderModel model = new SelectedOrderModel();
+                    model.tableId = item.toString();
+                    model.orderId = "Order ID: 0000000";
+                    widget.bloc.selectedOrderModel = model;
+                  });
+                }
               },
               child: Container(
                   margin: EdgeInsetsDirectional.only(bottom: 10),

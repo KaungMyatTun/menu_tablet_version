@@ -5,6 +5,7 @@ import 'package:menu_tablet/bloc/menu_tablet_main_bloc.dart';
 import 'package:menu_tablet/util/Constants.dart';
 import 'package:menu_tablet/util/HexColor.dart';
 import 'package:menu_tablet/widgets/dialog_manager.dart';
+import 'package:menu_tablet/widgets/table_status_widget.dart';
 import 'package:menu_tablet/widgets/waiter_second_panel_with_table_detail.dart';
 import 'package:menu_tablet/widgets/waiter_second_panel_with_table_name.dart';
 
@@ -101,7 +102,6 @@ class _WaiterTableScreenState extends State<WaiterTableScreen>
                                               ),
                                               margin: EdgeInsets.only(
                                                   top: 10,
-                                                  left: 10,
                                                   right: 10,
                                                   bottom: 10),
                                               width: 30,
@@ -121,6 +121,11 @@ class _WaiterTableScreenState extends State<WaiterTableScreen>
                               ),
                             );
                           },
+                        ),
+                        TableStatusWidget(
+                          freeTableCount: 10,
+                          activeTableCount: 3,
+                          reserveTableCount: 5,
                         ),
                         StreamBuilder(
                           stream: widget.bloc.showWaiterTableDetailScreenStream,
