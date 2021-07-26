@@ -41,6 +41,7 @@ class _KitchenOrderScreenState extends State<KitchenOrderScreen>
         child: Row(
       children: [
         // second panel
+        
         Expanded(
             flex: 4,
             child: CupertinoScrollbar(
